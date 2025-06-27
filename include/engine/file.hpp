@@ -6,6 +6,8 @@
 #include <sstream>
 #include <iostream>
 
+
 std::string readFile(const char* filePath);
+
 
 #endif

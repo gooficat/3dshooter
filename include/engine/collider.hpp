@@ -1,8 +1,7 @@
 #ifndef COLLIDER
 #define COLLIDER
 #include <glm/glm.hpp>
-#include <glm/gtx/norm.hpp>
-#include <glm/gtc/clamp.hpp>
+#include <glm/common.hpp>
 
 
 class Collider {
@@ -20,6 +19,7 @@ public:
 };
 
 class BoundingBoxCollider : public Collider {
+public:
 	glm::vec3 nPoint, pPoint;
 	BoundingBoxCollider(glm::vec3 position, glm::vec3 nPoint, glm::vec3 pPoint);
 	bool isColliding(Collider& other) override;

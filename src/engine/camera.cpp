@@ -35,26 +35,6 @@ glm::mat4 PerspectiveCamera::getProjectionMatrix() const {
     return glm::perspective(glm::radians(fov), aspectRatio, near, far);
 }
 
-void PerspectiveCamera::setFOV(float fov) {
-    this->fov = fov;
-    updateProjectionMatrix();
-}
-
-void PerspectiveCamera::setAspectRatio(float aspectRatio) {
-    this->aspectRatio = aspectRatio;
-    updateProjectionMatrix();
-}
-
-void PerspectiveCamera::setNear(float near) {
-    this->near = near;
-    updateProjectionMatrix();
-}
-
-void PerspectiveCamera::setFar(float far) {
-    this->far = far;
-    updateProjectionMatrix();
-}
-
 void PerspectiveCamera::updateProjectionMatrix() {
     //this->projectionMatrix = glm::perspective(glm::radians(this->fov), this->aspectRatio, this->near, this->far);
 }

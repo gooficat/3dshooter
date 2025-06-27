@@ -11,7 +11,7 @@ find_package(OpenGL REQUIRED)
 include_directories(include)
 
 # Add source files
-file(GLOB_RECURSE SOURCES "src/*.cpp" "src/*.c")
+file(GLOB_RECURSE SOURCES "src/*.cpp" "src/*.c" "src/engine/*.cpp")
 
 # Add executable target
 add_executable(${PROJECT_NAME} ${SOURCES})

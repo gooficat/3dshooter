@@ -1,21 +1,29 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-static const float GRAVITY;
-static const float PLAYER_SPEED, PLAYER_ACCEL_DEFAULT, PLAYER_ACCEL_AIR, PLAYER_JUMP_VELOCITY;
-static const float CAM_ACCEL, MOUSE_SENS;
-static float player_accel;
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include "engine/collider.hpp"
+#include "engine/camera.hpp"
+#include "engine/shader.hpp"
 
+static float GRAVITY;
+static float PLAYER_ACCEL_AIR, PLAYER_JUMP_VELOCITY;
+static float CAM_ACCEL, MOUSE_SENS;
 
 
 class Player {
 public:
-	Collider* collider;
-	Camera* camera;
-	glm::vec3 position, rotation, velocity;
+	SphereCollider* collider;
+	PerspectiveCamera* camera;
+	glm::vec3 position, rotation, velocity, head, direction;
+	float accel;
+	glm::vec3 _accel;
 	Player(glm::vec3 position, glm::vec3 rotation);
+	~Player();
 	
-	void update(float delta, glm::vec2 mouse_offset);
+	void update(GLFWwindow* window, Shader& shader, float deltaTime, glm::vec2 mouseRelative);
 private:
 };
 

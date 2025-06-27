@@ -1,5 +1,15 @@
 #include "engine/mesh.hpp"
 
+
+Texture::Texture(const char* texturePath) {
+	unsigned char *data = stbi_load(texturePath, &width, &height, &nrChannels, 0); 
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, texture);  
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(data);
+}
+
 Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
     : vertices(vertices), indices(indices), modelMatrix(glm::mat4(1.0f)) {
     setupVAO();

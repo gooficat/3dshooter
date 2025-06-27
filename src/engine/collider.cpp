@@ -3,16 +3,16 @@
 Collider::Collider(glm::vec3 position) : position(position) {}
 
 bool Collider::isColliding(Collider& other) {
-    if (dynamic_cast<SphereCollider*>(&other)) {
-		return glm::distance(position, other.position) < other.radius;
+    if (SphereCollider* sphere = dynamic_cast<SphereCollider*>(&other)) {
+		return glm::distance(position, sphere->position) < sphere->radius;
 	}
-	else if (dynamic_cast<BoundingBoxCollider*>(&other)) {
-		return (position.x > other.nPoint.x &&
-				position.x < other.pPoint.x &&
-				position.y > other.nPoint.y &&
-				position.y < other.nPoint.y &&
-				position.z > other.nPoint.z &&
-				position.z < other.nPoint.z
+	else if (BoundingBoxCollider* box = dynamic_cast<BoundingBoxCollider*>(&other)) {
+		return (position.x > box->nPoint.x &&
+				position.x < box->pPoint.x &&
+				position.y > box->nPoint.y &&
+				position.y < box->nPoint.y &&
+				position.z > box->nPoint.z &&
+				position.z < box->nPoint.z
 				);
 	}
 	else {
@@ -25,10 +25,10 @@ SphereCollider::SphereCollider(glm::vec3 position, float radius) : Collider(posi
 
 
 bool SphereCollider::isColliding(Collider& other) {
-    if (dynamic_cast<SphereCollider*>(&other)) {
-		return glm::distance(position, other.position) < other.radius + radius;
+    if (SphereCollider* sphere = dynamic_cast<SphereCollider*>(&other)) {
+		return glm::distance(position, sphere->position) < sphere->radius + radius;
 	}
-	else if (dynamic_cast<BoundingBoxCollider*>(&other)) {
+	else if (BoundingBoxCollider* box = dynamic_cast<BoundingBoxCollider*>(&other)) {
 		glm::vec3 closestPoint = glm::clamp(position, box->nPoint, box->pPoint);
 	}
 	else {

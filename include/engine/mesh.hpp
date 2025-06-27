@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #include "engine/shader.hpp"
 
 struct Vertex {
@@ -14,30 +17,35 @@ struct Vertex {
     glm::vec2 texCoords;
 };
 
+struct Texture {
+	int width, height, nrChannels;
+	unsigned int id;
+	Texture(const char* texturePath);
+};
+
 class Mesh {
 public:
-    // Constructor
-    Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
-
-    // Destructor
+    virtual Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
     ~Mesh();
+    virtual void draw(Shader& shader);
 
-    // Render the mesh
-    void draw(Shader& shader);
-
-    // Model matrix
     glm::mat4 modelMatrix;
 
 private:
-    // Mesh data
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
-    // OpenGL data
     GLuint VAO, VBO, EBO;
     
-    // Initialize OpenGL buffers and arrays 
+protected:
     void setupVAO();
+};
+
+class TextureMesh : public Mesh {
+public:
+	TextureMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const Texture& texture);
+private:
+	
 };
 
 #endif
