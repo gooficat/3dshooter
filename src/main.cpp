@@ -2,12 +2,14 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+
 #include "engine/shader.hpp"
 #include "engine/camera.hpp"
 #include "engine/mesh.hpp"
 #include "engine/collider.hpp"
 
 #include "player.hpp"
+
 	
 double mouse_posX, mouse_posY, last_mouse_posX, last_mouse_posY;
 
@@ -64,15 +66,16 @@ int main() {
 
     std::vector<Vertex> vertices = {
         // Positions            // Normals           // Texture coords
-        {{-100.0f, -1.0f, -100.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
-        {{-100.0f, -1.0f,  100.0f},  {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
-        {{ 100.0f, -1.0f,  100.0f},   {0.0f, 0.0f, 1.0f}, {0.5f, 1.0f}},
-        {{ 100.0f, -1.0f, -100.0f},   {0.0f, 0.0f, 1.0f}, {0.5f, 1.0f}}
+        {{-100.0f, 0.0f, -100.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
+        {{-100.0f, 0.0f,  100.0f},  {0.0f, 0.0f, 1.0f}, {0.0f, 10.0f}},
+        {{ 100.0f, 0.0f,  100.0f},   {0.0f, 0.0f, 1.0f}, {10.0f, 10.0f}},
+        {{ 100.0f, 0.0f, -100.0f},   {0.0f, 0.0f, 1.0f}, {10.0f, 0.0f}}
     };
     std::vector<unsigned int> indices = {0, 1, 2, 2, 0, 3};
 
+	Texture texture("./textures/LAB/wall/tile000.png");
     // Create a Mesh object
-    Mesh mesh(vertices, indices);
+    TextureMesh mesh(vertices, indices, &texture);
 	
 	Player player({0.0f, 0.0f, 3.0f}, {0.0f ,0.0f, 0.0f});
 	
@@ -86,12 +89,12 @@ int main() {
 		deltaTime = (currentFrame - lastFrame);
 		lastFrame = currentFrame;
         processInput(window);
+        shader.use();
 		
 		last_mouse_posX = mouse_posX;
 		last_mouse_posY = mouse_posY;
 		glfwGetCursorPos(window, &mouse_posX, &mouse_posY);
 		
-        shader.use();
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		

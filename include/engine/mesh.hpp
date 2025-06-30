@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 #include "engine/shader.hpp"
@@ -21,11 +20,12 @@ struct Texture {
 	int width, height, nrChannels;
 	unsigned int id;
 	Texture(const char* texturePath);
+	void use(Shader& shader);
 };
 
 class Mesh {
 public:
-    virtual Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
+    Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
     ~Mesh();
     virtual void draw(Shader& shader);
 
@@ -43,7 +43,9 @@ protected:
 
 class TextureMesh : public Mesh {
 public:
-	TextureMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const Texture& texture);
+	Texture* texture;
+	TextureMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, Texture* texture);
+	void draw(Shader& shader) override;
 private:
 	
 };

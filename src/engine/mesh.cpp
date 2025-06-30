@@ -4,10 +4,14 @@
 Texture::Texture(const char* texturePath) {
 	unsigned char *data = stbi_load(texturePath, &width, &height, &nrChannels, 0); 
 	glGenTextures(1, &id);
-	glBindTexture(GL_TEXTURE_2D, texture);  
+	glBindTexture(GL_TEXTURE_2D, id);  
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(data);
+}
+
+void Texture::use(Shader& shader) {
+	glBindTexture(GL_TEXTURE_2D, id);
 }
 
 Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
@@ -55,4 +59,14 @@ void Mesh::setupVAO() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
 
     glBindVertexArray(0);
+}
+
+TextureMesh::TextureMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, Texture* texture) :
+						Mesh(vertices, indices), texture{texture} {
+	
+}
+
+void TextureMesh::draw(Shader& shader) {
+	texture->use(shader);
+	Mesh::draw(shader);
 }
