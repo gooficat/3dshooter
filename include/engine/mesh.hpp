@@ -30,6 +30,7 @@ public:
     virtual void draw(Shader& shader);
 
     glm::mat4 modelMatrix;
+	glm::vec3 position, rotation;
 
 private:
     std::vector<Vertex> vertices;

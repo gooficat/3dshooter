@@ -1,7 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <vector>
 
+#include <glm/glm.hpp>
 
 #include "engine/shader.hpp"
 #include "engine/camera.hpp"
@@ -61,7 +63,9 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 	
 	glfwGetCursorPos(window, &mouse_posX, &mouse_posX);
-
+	
+	std::vector<Collider> colliders;
+	
     Shader shader("./shaders/default.vert", "./shaders/default.frag");
 
     std::vector<Vertex> vertices = {
@@ -77,7 +81,31 @@ int main() {
     // Create a Mesh object
     TextureMesh mesh(vertices, indices, &texture);
 	
-	Player player({0.0f, 0.0f, 3.0f}, {0.0f ,0.0f, 0.0f});
+	BoundingBoxCollider collider(
+		{0.0f, 0.0f, 0.0f},
+		{-100.0f, 0.0f, -100.0f},
+		{100.0f, 0.0f, 100.0f}
+	);
+	
+	colliders.push_back(collider);
+	
+	Player player({0.0f, 2.0f, 0.0f}, {0.0f ,0.0f, 0.0f});
+	
+	std::vector<Vertex> playerVertices = {
+        // Positions            // Normals           // Texture coords
+        {{-1.0f, 0.0f, -1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
+        {{-1.0f, 0.0f,  1.0f},  {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+        {{ 1.0f, 0.0f,  1.0f},   {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+        {{ 1.0f, 0.0f, -1.0f},   {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}}
+    };
+    std::vector<unsigned int> playerIndices = {0, 1, 2, 2, 0, 3};
+	
+	Texture pTexture("./textures/LAB/wall/tile050.png");
+    TextureMesh pMesh(playerVertices, playerIndices, &pTexture);
+	
+	PerspectiveCamera cam(75.0f, 800.0f/600.0f, 0.1f, 1000.0f);
+	cam.pitch = 3.1f;
+	cam.position.y = 100.0f;
 	
 	float currentFrame = glfwGetTime();
 	float lastFrame = currentFrame;
@@ -99,9 +127,12 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		player.update(window, shader, deltaTime, (glm::vec2){(float)(mouse_posX - last_mouse_posX), (float)(mouse_posY - last_mouse_posY)});
-		
-		
+		player.move_and_collide(colliders, deltaTime);
+		cam.use(shader);
         mesh.draw(shader);
+		//pMesh.position = player.position;
+		//pMesh.rotation.y = player.camera->yaw;
+		pMesh.draw(shader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

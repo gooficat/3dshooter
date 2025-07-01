@@ -11,9 +11,9 @@ glm::mat4 Camera::getViewMatrix() const {
 
 void Camera::updateCameraVectors() {
     glm::vec3 newFront;
-    newFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    newFront.y = sin(glm::radians(pitch));
-    newFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    newFront.x = cos(yaw) * cos(pitch);
+    newFront.y = sin(pitch);
+    newFront.z = sin(yaw) * cos(pitch);
     front = glm::normalize(newFront);
 
     right = glm::normalize(glm::cross(front, worldUp));
@@ -32,7 +32,7 @@ PerspectiveCamera::PerspectiveCamera(float fov, float aspectRatio, float near, f
 }
 
 glm::mat4 PerspectiveCamera::getProjectionMatrix() const {
-    return glm::perspective(glm::radians(fov), aspectRatio, near, far);
+    return glm::perspective(fov, aspectRatio, near, far);
 }
 
 void PerspectiveCamera::updateProjectionMatrix() {

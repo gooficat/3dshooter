@@ -15,7 +15,7 @@ void Texture::use(Shader& shader) {
 }
 
 Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
-    : vertices(vertices), indices(indices), modelMatrix(glm::mat4(1.0f)) {
+    : vertices(vertices), indices(indices), position(glm::vec3(0.0f)), rotation(glm::vec3(0.0f)) {
     setupVAO();
 }
 
@@ -26,6 +26,8 @@ Mesh::~Mesh() {
 }
 
 void Mesh::draw(Shader& shader) {
+	modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::translate(modelMatrix, position);
     shader.setMat4("model", modelMatrix);
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);

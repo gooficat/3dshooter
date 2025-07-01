@@ -2,6 +2,8 @@
 #define COLLIDER
 #include <glm/glm.hpp>
 #include <glm/common.hpp>
+#include <cmath>
+#include <algorithm>
 
 
 class Collider {
